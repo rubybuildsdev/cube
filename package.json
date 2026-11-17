@@ -1,0 +1,29 @@
+{
+  "name": "cubesolver-3d",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node scripts/audit-i18n.js && node scripts/test-solver.js && node scripts/test-3d.mjs",
+    "test:solver": "node scripts/test-solver.js",
+    "test:3d": "node scripts/test-3d.mjs",
+    "test:i18n": "node scripts/audit-i18n.js"
+  },
+  "dependencies": {
+    "cubejs": "^1.3.2",
+    "lucide-react": "^1.16.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.182.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/three": "^0.182.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "tailwindcss": "^4.1.0",
+    "vite": "^6.2.0"
+  }
+}
