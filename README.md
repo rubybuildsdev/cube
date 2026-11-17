@@ -207,16 +207,6 @@ cube/
 └── README.md               # Dokumentasi lengkap proyek
 ```
 
----
-
-## 👤 Pembuat / Author
-
-**Ruby**
-- Email: [rubykln80@gmail.com](mailto:rubykln80@gmail.com)
-- GitHub: [@rubykln](https://github.com/rubykln)
-
----
-
 ## 📄 Lisensi / License
 
 Proyek ini dilisensikan di bawah lisensi **MIT License** — Anda bebas menggunakan, memodifikasi, dan mendistribusikan kode ini untuk keperluan pribadi maupun komersial.
