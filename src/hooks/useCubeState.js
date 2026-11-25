@@ -80,11 +80,14 @@ export function useCubeState({
     if (validation.errorKey === 'invalid_centers') {
       return t('validation.centerCanonical', 'Stiker pusat harus tetap kanonikal');
     }
-    if (validation.errorKey === 'corner_parity_error') {
+    if (validation.errorKey === 'corner_twist_error') {
       return t('validation.cornerParityError', 'Terdeteksi satu sudut terputar');
     }
     if (validation.errorKey === 'edge_flip_error') {
       return t('validation.edgeParityError', 'Terdeteksi satu edge terbalik');
+    }
+    if (validation.errorKey === 'invalid_corners' || validation.errorKey === 'invalid_edges') {
+      return validation.details || t('validation.invalidConfig', 'Konfigurasi tidak valid');
     }
     if (validation.errorKey === 'parity_error') {
       return t('validation.parityError', 'Terdeteksi kesalahan paritas');
@@ -106,13 +109,14 @@ export function useCubeState({
   }, [cubeCanvasRef, onResetPlaybackState]);
 
   const handleScramble = useCallback(() => {
+    if (puzzleSize !== 3) return;
     onResetPlaybackState?.();
     playScrambleSound();
     const scrambleMoves = generateScramble(20);
     const scrambled = applyScramble(createSolvedState(), scrambleMoves);
     setCubeState(scrambled);
     cubeCanvasRef.current?.setCubeState?.(scrambled);
-  }, [cubeCanvasRef, onResetPlaybackState]);
+  }, [puzzleSize, cubeCanvasRef, onResetPlaybackState]);
 
   const handleResetSolved = useCallback(() => {
     onResetPlaybackState?.();
@@ -148,20 +152,22 @@ export function useCubeState({
   }, [appMode, selectedColor, onResetPlaybackState]);
 
   const handleApplyMove = useCallback((move) => {
-    if (!move) return;
+    if (!move || puzzleSize !== 3) return;
     onResetPlaybackState?.();
     const isInstant = speed === 'instant';
     cubeCanvasRef.current?.executeMove?.(move, !isInstant);
 
     setCubeState((prev) => {
       const next = applyMove(prev, move);
-      playTurnSound(isInstant ? 4 : speed);
+      if (isInstant) {
+        playTurnSound(4);
+      }
       if (isSolved(next)) {
         setTimeout(() => onSolved?.(), 250);
       }
       return next;
     });
-  }, [cubeCanvasRef, onResetPlaybackState, speed, onSolved]);
+  }, [puzzleSize, cubeCanvasRef, onResetPlaybackState, speed, onSolved]);
 
   return {
     cubeState,
