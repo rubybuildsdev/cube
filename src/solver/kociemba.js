@@ -25,13 +25,18 @@ export function initKociemba() {
   if (initPromise) return initPromise;
 
   initPromise = new Promise((resolve, reject) => {
-    try {
-      Cube.initSolver();
-      isInitialized = true;
-      resolve();
-    } catch (err) {
-      reject(err);
-    }
+    setTimeout(() => {
+      try {
+        if (!isInitialized) {
+          Cube.initSolver();
+          isInitialized = true;
+        }
+        resolve();
+      } catch (err) {
+        initPromise = null;
+        reject(err);
+      }
+    }, 0);
   });
 
   return initPromise;
