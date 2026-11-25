@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Play, Pause, RotateCcw, X, Volume2, VolumeX, Flame, Trophy, Clock, Check, ChevronDown, ChevronUp } from 'lucide-react';
-import { playClickSound, playHoverSound } from '../../utils/audio';
+import { getAudioContext, playClickSound, playHoverSound } from '../../utils/audio';
 
 const STORAGE_KEY_TIMES = 'cubesolver_timer_times_v1';
 const STORAGE_KEY_PREFS = 'cubesolver_timer_prefs_v1';
@@ -40,9 +40,8 @@ function calculateAo12(times) {
 
 function playSynthesizedBeep(freq = 600, duration = 0.05, type = 'sine') {
   try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
+    const ctx = getAudioContext();
+    if (!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = type;
