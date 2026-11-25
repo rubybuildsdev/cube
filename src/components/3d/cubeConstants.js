@@ -6,7 +6,6 @@
 import {
   createSolvedState,
   stringToState,
-  stateToFaceletString,
   applyMove,
 } from '../../solver/cubeState.js';
 
@@ -80,7 +79,8 @@ export function normalizeCubeState(input) {
  * Converts a cubeState object to standard 54-char string (U-R-F-D-L-B)
  */
 export function cubeStateToString(state) {
-  return stateToFaceletString(normalizeCubeState(state));
+  const norm = normalizeCubeState(state);
+  return norm.U.join('') + norm.R.join('') + norm.F.join('') + norm.D.join('') + norm.L.join('') + norm.B.join('');
 }
 
 /**
