@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Play, Pause, RotateCcw, X, Volume2, VolumeX, Flame, Trophy, Clock, Check, ChevronDown, ChevronUp } from 'lucide-react';
-import { getAudioContext, playClickSound, playHoverSound } from '../../utils/audio';
+import { getAudioContext, isMuted, playClickSound, playHoverSound } from '../../utils/audio';
 
 const STORAGE_KEY_TIMES = 'cubesolver_timer_times_v1';
-const STORAGE_KEY_PREFS = 'cubesolver_timer_prefs_v1';
 
 function formatTime(ms) {
   if (ms < 0 || isNaN(ms)) ms = 0;
@@ -39,6 +38,7 @@ function calculateAo12(times) {
 }
 
 function playSynthesizedBeep(freq = 600, duration = 0.05, type = 'sine') {
+  if (isMuted()) return;
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
@@ -70,8 +70,6 @@ export default function TimerHUD({
   // WCA Timer States: 'idle' | 'holding' | 'ready' | 'inspecting' | 'running' | 'stopped'
   const [wcaState, setWcaState] = useState('idle');
   const [elapsedMs, setElapsedMs] = useState(0);
-  const [inspectionSeconds, setInspectionSeconds] = useState(15);
-  const [useInspection, setUseInspection] = useState(false);
 
   // Time Attack Settings: 30s, 60s, 120s
   const [attackDuration, setAttackDuration] = useState(60); // in seconds
@@ -326,6 +324,7 @@ export default function TimerHUD({
       if (wcaState === 'running') {
         stopWcaRunning();
       } else if (wcaState === 'idle' || wcaState === 'stopped') {
+        if (holdTimerRef.current !== null) return;
         setWcaState('holding');
         playSynthesizedBeep(450, 0.04, 'sine');
         holdTimerRef.current = setTimeout(() => {
@@ -494,6 +493,8 @@ export default function TimerHUD({
         <div
           onPointerDown={handleTouchHoldStart}
           onPointerUp={handleTouchHoldEnd}
+          onPointerCancel={handleTouchHoldEnd}
+          onPointerLeave={handleTouchHoldEnd}
           className={`relative w-full py-4 px-3 rounded-lg border-2 border-black dark:border-zinc-700 text-center transition-colors cursor-pointer select-none flex flex-col items-center justify-center ${
             wcaState === 'ready'
               ? 'bg-[#24C789]/20 border-[#24C789]'
@@ -531,6 +532,8 @@ export default function TimerHUD({
                 type="button"
                 onPointerDown={handleTouchHoldStart}
                 onPointerUp={handleTouchHoldEnd}
+                onPointerCancel={handleTouchHoldEnd}
+                onPointerLeave={handleTouchHoldEnd}
                 className={`brutal-btn flex-1 py-1.5 rounded-lg border-2 border-black text-xs font-mono font-bold transition-all ${
                   wcaState === 'running'
                     ? 'bg-[#FF5252] text-white hover:bg-[#EF4444]'

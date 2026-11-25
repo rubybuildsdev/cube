@@ -370,7 +370,20 @@ export const CubeCanvas = forwardRef(function CubeCanvas(
     });
     resizeObserver.observe(container);
 
-    // 10. Animation render loop
+    // 10. IntersectionObserver + Animation render loop
+    let isVisible = true;
+    const intersectionObserver = typeof IntersectionObserver !== 'undefined'
+      ? new IntersectionObserver(
+          ([entry]) => {
+            isVisible = entry.isIntersecting;
+          },
+          { threshold: 0 }
+        )
+      : null;
+    if (intersectionObserver) {
+      intersectionObserver.observe(container);
+    }
+
     let lastTime = performance.now();
     const renderLoop = (time) => {
       animFrameIdRef.current = requestAnimationFrame(renderLoop);
@@ -386,7 +399,9 @@ export const CubeCanvas = forwardRef(function CubeCanvas(
       // Smooth damping update
       controls.update();
 
-      renderer.render(scene, camera);
+      if (isVisible) {
+        renderer.render(scene, camera);
+      }
       lastTime = time;
     };
 
@@ -398,6 +413,7 @@ export const CubeCanvas = forwardRef(function CubeCanvas(
         cancelAnimationFrame(animFrameIdRef.current);
       }
 
+      intersectionObserver?.disconnect();
       resizeObserver.disconnect();
 
       domElement.removeEventListener('pointerdown', onPointerDown);
