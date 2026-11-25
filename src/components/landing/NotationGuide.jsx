@@ -229,11 +229,11 @@ export default function NotationGuide({ t }) {
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black font-sans mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black dark:text-zinc-100 font-sans mb-4">
             {tr('notation.title', 'Kamus Notasi Gerakan Rubik')}
           </h2>
 
-          <p className="text-base sm:text-lg text-zinc-700 font-medium leading-relaxed">
+          <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed">
             {tr(
               'notation.subtitle',
               'Kuasai notasi Singmaster resmi World Cube Association. Klik notasi untuk memeriksa arah jarum jam dan cue gerakan fisiknya.'

@@ -41,23 +41,34 @@ for (const file of files) {
   }
 }
 
-let missingInDict = [];
-for (const k of foundKeys) {
-  const parts = k.split('.');
-  let curr = translations.en;
-  let ok = true;
-  for (const p of parts) {
-    if (curr && typeof curr === 'object' && p in curr) {
-      curr = curr[p];
-    } else {
-      ok = false;
-      break;
+function checkDict(keys, dict) {
+  const missing = [];
+  for (const k of keys) {
+    const parts = k.split('.');
+    let curr = dict;
+    let ok = true;
+    for (const p of parts) {
+      if (curr && typeof curr === 'object' && p in curr) {
+        curr = curr[p];
+      } else {
+        ok = false;
+        break;
+      }
+    }
+    if (!ok) {
+      missing.push(k);
     }
   }
-  if (!ok) {
-    missingInDict.push(k);
-  }
+  return missing;
 }
 
+const missingInEn = checkDict(foundKeys, translations.en);
+const missingInId = checkDict(foundKeys, translations.id);
+
 console.log('Keys used in components:', foundKeys.size);
-console.log('Keys not found in translations.en:', missingInDict);
+console.log('Keys not found in translations.en:', missingInEn);
+console.log('Keys not found in translations.id:', missingInId);
+
+if (missingInEn.length > 0 || missingInId.length > 0) {
+  process.exit(1);
+}

@@ -25,7 +25,7 @@ export default function LandingFooter({
   };
 
   return (
-    <footer className="w-full bg-[#F5EFEB] border-t-[2.5px] border-black select-none">
+    <footer className="w-full bg-[#F5EFEB] dark:bg-[#1E1E22] border-t-[2.5px] border-black dark:border-zinc-700 select-none">
       
       {/* Top Banner CTA Strip */}
       <div className="bg-[#FFE600] border-b-[2.5px] border-black py-8 px-4 sm:px-6">
@@ -71,12 +71,12 @@ export default function LandingFooter({
                   <div className="bg-[#24C789] border-[0.5px] border-black"></div>
                 </div>
               </div>
-              <span className="font-black text-xl tracking-tight text-black font-sans">
+              <span className="font-black text-xl tracking-tight text-black dark:text-zinc-100 font-sans">
                 CubeSolver 3D
               </span>
             </div>
 
-            <p className="text-sm text-zinc-700 leading-relaxed max-w-md font-medium mb-4">
+            <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-md font-medium mb-4">
               {tr(
                 'footer.desc',
                 'Laboratorium Rubik 3D taktil interaktif dengan simulasi Three.js WebGL, algoritma optimal Kociemba, tutorial Layer-by-Layer terpandu, dan studio kalibrasi stiker.'

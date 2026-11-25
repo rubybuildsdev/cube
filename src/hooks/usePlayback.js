@@ -22,15 +22,16 @@ export function usePlayback({
   cubeCanvasRef,
   cubeState,
   setCubeState,
+  puzzleSize = 3,
   solverMode,
   validation,
   isCubeSolved,
+  speed,
   onSolved,
 }) {
   const [solution, setSolution] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState(1);
   const [isSolving, setIsSolving] = useState(false);
   const [initialStateBeforeSolve, setInitialStateBeforeSolve] = useState(null);
 
@@ -42,7 +43,8 @@ export function usePlayback({
       clearTimeout(playbackTimerRef.current);
       playbackTimerRef.current = null;
     }
-  }, []);
+    cubeCanvasRef.current?.stopAnimation?.();
+  }, [cubeCanvasRef]);
 
   const resetPlaybackState = useCallback(() => {
     stopPlayback();
@@ -52,6 +54,7 @@ export function usePlayback({
   }, [stopPlayback]);
 
   const handleSolve = useCallback(async () => {
+    if (puzzleSize !== 3) return;
     stopPlayback();
 
     if (!validation.isValid) {
@@ -90,7 +93,7 @@ export function usePlayback({
       setIsSolving(false);
       playErrorSound();
     }
-  }, [stopPlayback, validation, isCubeSolved, onSolved, solverMode, cubeState]);
+    }, [stopPlayback, puzzleSize, validation, isCubeSolved, onSolved, solverMode, cubeState]);
 
   useEffect(() => {
     if (!isPlaying || !solution.length) return;
@@ -114,7 +117,9 @@ export function usePlayback({
 
       setCubeState((prev) => {
         const next = applyMove(prev, move);
-        playTurnSound(isInstant ? 4 : speed);
+        if (isInstant) {
+          playTurnSound(4);
+        }
         return next;
       });
 
@@ -141,7 +146,9 @@ export function usePlayback({
 
     setCubeState((prev) => {
       const next = applyMove(prev, move);
-      playTurnSound(isInstant ? 4 : speed);
+      if (isInstant) {
+        playTurnSound(4);
+      }
       if (nextIndex === solution.length - 1 && isSolved(next)) {
         setTimeout(() => onSolved?.(), 250);
       }
@@ -164,7 +171,9 @@ export function usePlayback({
 
     setCubeState((prev) => {
       const next = applyMove(prev, inverted);
-      playTurnSound(isInstant ? 4 : speed);
+      if (isInstant) {
+        playTurnSound(4);
+      }
       return next;
     });
 
@@ -213,8 +222,6 @@ export function usePlayback({
     currentStepIndex,
     isPlaying,
     setIsPlaying,
-    speed,
-    setSpeed,
     isSolving,
     activeStep,
     stopPlayback,

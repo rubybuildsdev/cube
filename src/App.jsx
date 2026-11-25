@@ -82,12 +82,12 @@ export default function App() {
   // 3D Canvas & cross-hook refs
   const cubeCanvasRef = useRef(null);
   const resetPlaybackRef = useRef(null);
-  const speedRef = useRef(1);
+  const [speed, setSpeed] = useState(1);
 
-  const t = useCallback(
-    (key, fallback, params) => translateKey(key, lang, params) || fallback || key,
-    [lang]
-  );
+  const t = useCallback((key, fallback, params) => {
+    const val = translateKey(key, lang, params);
+    return (val && val !== key) ? val : (fallback || key);
+  }, [lang]);
 
   const handleSetLang = useCallback((newLang) => {
     setLang(newLang);
@@ -151,7 +151,7 @@ export default function App() {
     t,
     onResetPlaybackState: useCallback(() => resetPlaybackRef.current?.(), []),
     onSolved: handleSolved,
-    speed: speedRef.current,
+    speed,
   });
 
   const {
@@ -159,8 +159,6 @@ export default function App() {
     currentStepIndex,
     isPlaying,
     setIsPlaying,
-    speed,
-    setSpeed,
     isSolving,
     activeStep,
     resetPlaybackState,
@@ -173,14 +171,15 @@ export default function App() {
     cubeCanvasRef,
     cubeState,
     setCubeState,
+    puzzleSize,
     solverMode,
     validation,
     isCubeSolved,
+    speed,
     onSolved: handleSolved,
   });
 
   resetPlaybackRef.current = resetPlaybackState;
-  speedRef.current = speed;
 
   // Keyboard Shortcuts Listener (active only in Studio Mode)
   useEffect(() => {
@@ -193,8 +192,18 @@ export default function App() {
       const key = e.key;
       const code = e.code;
 
+      if (key === 'Escape') {
+        setIsShortcutsOpen(false);
+        setIsGalleryOpen(false);
+        setAppMode('solve');
+        return;
+      }
+
+      if (appMode === 'calibrate' || isTimerOpen || isShortcutsOpen || isGalleryOpen) {
+        return;
+      }
+
       if (code === 'Space') {
-        if (isTimerOpen) return;
         e.preventDefault();
         setIsPlaying((prev) => !prev);
       } else if (code === 'ArrowRight') {
@@ -235,7 +244,10 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [
     viewMode,
+    appMode,
     isTimerOpen,
+    isShortcutsOpen,
+    isGalleryOpen,
     setIsPlaying,
     handleStepForward,
     handleStepBackward,
@@ -317,7 +329,7 @@ export default function App() {
 
         {/* Dismissible First-Time Studio Onboarding Tooltip */}
         {showOnboarding && (
-          <div className="relative z-20 mx-auto mt-3 px-4 max-w-md pointer-events-auto">
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 w-full max-w-md px-4 pointer-events-auto">
             <div className="flex items-start gap-3 bg-[#FFE600] dark:bg-[#1E1E22] text-black dark:text-zinc-100 border-2 border-black dark:border-zinc-700 shadow-[4px_4px_0px_#000] dark:shadow-[4px_4px_0px_#3F3F46] px-3.5 py-2.5 text-xs font-mono">
               <Sparkles className="w-4 h-4 shrink-0 mt-0.5 text-black dark:text-[#FFE600]" />
               <div className="flex-1 leading-relaxed">

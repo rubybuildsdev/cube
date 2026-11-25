@@ -54,7 +54,7 @@ export default function AlgorithmComparison({ onEnterStudio, t }) {
   ];
 
   return (
-    <section id="algorithms" className="relative w-full bg-[#FDFBF7] border-b-[2.5px] border-black py-16 sm:py-24 select-none">
+    <section id="algorithms" className="relative w-full bg-[#FDFBF7] dark:bg-[#18181B] border-b-[2.5px] border-black dark:border-zinc-700 py-16 sm:py-24 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -66,11 +66,11 @@ export default function AlgorithmComparison({ onEnterStudio, t }) {
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black font-sans mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black dark:text-zinc-100 font-sans mb-4">
             {tr('algorithms.title', 'Dua Metode untuk Dua Kebutuhan Berbeda')}
           </h2>
 
-          <p className="text-base sm:text-lg text-zinc-700 font-medium leading-relaxed">
+          <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed">
             {tr(
               'algorithms.subtitle',
               'Apakah Anda menginginkan rute terpendek yang efisien secara matematis, atau ingin menguasai langkah-langkah logika untuk memecahkan kubus dengan tangan sendiri?'
@@ -142,7 +142,7 @@ export default function AlgorithmComparison({ onEnterStudio, t }) {
 
             <button
               type="button"
-              onClick={onEnterStudio}
+              onClick={() => onEnterStudio?.('optimal')}
               className="brutal-btn brutal-btn-yellow w-full py-3.5 text-base gap-2"
             >
               <Zap className="w-4 h-4 fill-black text-black" />
@@ -211,7 +211,7 @@ export default function AlgorithmComparison({ onEnterStudio, t }) {
 
             <button
               type="button"
-              onClick={onEnterStudio}
+              onClick={() => onEnterStudio?.('beginner')}
               className="brutal-btn brutal-btn-green w-full py-3.5 text-base gap-2"
             >
               <BookOpen className="w-4 h-4 text-black" />
