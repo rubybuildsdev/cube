@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Menu, X, Sparkles, Globe, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../../hooks/useTheme.js';
 
 /**
  * LandingNavbar - Neubrutalist tactile top navigation bar
@@ -14,14 +15,7 @@ export default function LandingNavbar({
   t
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return document.documentElement.classList.contains('dark') ||
-        localStorage.getItem('theme') === 'dark' ||
-        localStorage.getItem('cubesolver_theme') === 'dark';
-    }
-    return false;
-  });
+  const { isDark, toggleTheme } = useTheme();
 
   const tr = (key, fallback) => {
     if (typeof t === 'function') {
@@ -29,47 +23,6 @@ export default function LandingNavbar({
       if (val && val !== key) return val;
     }
     return fallback;
-  };
-
-  // Sync theme with document.documentElement & localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem('theme') || localStorage.getItem('cubesolver_theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const shouldBeDark = saved === 'dark' || (!saved && prefersDark);
-
-    if (shouldBeDark) {
-      document.documentElement.classList.add('dark');
-      setIsDark(true);
-    } else {
-      document.documentElement.classList.remove('dark');
-      setIsDark(false);
-    }
-
-    const handleThemeChange = (e) => {
-      if (e?.detail?.isDark !== undefined) {
-        setIsDark(e.detail.isDark);
-      } else {
-        setIsDark(document.documentElement.classList.contains('dark'));
-      }
-    };
-
-    window.addEventListener('theme-change', handleThemeChange);
-    return () => window.removeEventListener('theme-change', handleThemeChange);
-  }, []);
-
-  const toggleTheme = () => {
-    const nextDark = !document.documentElement.classList.contains('dark');
-    if (nextDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      localStorage.setItem('cubesolver_theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      localStorage.setItem('cubesolver_theme', 'light');
-    }
-    setIsDark(nextDark);
-    window.dispatchEvent(new CustomEvent('theme-change', { detail: { isDark: nextDark } }));
   };
 
   const navLinks = [
