@@ -13,6 +13,8 @@ import {
   Moon,
   LayoutGrid,
   Sliders,
+  Settings,
+  ChevronDown,
 } from 'lucide-react';
 import { playClickSound, playHoverSound } from '../../utils/audio';
 
@@ -38,7 +40,9 @@ export default function Header({
   t = (key, fallback) => fallback || key,
 }) {
   const [showCustomSlider, setShowCustomSlider] = useState(false);
+  const [showToolsMenu, setShowToolsMenu] = useState(false);
   const customSliderRef = useRef(null);
+  const toolsMenuRef = useRef(null);
 
   // Close custom slider popup on outside click
   useEffect(() => {
@@ -46,14 +50,17 @@ export default function Header({
       if (customSliderRef.current && !customSliderRef.current.contains(event.target)) {
         setShowCustomSlider(false);
       }
+      if (toolsMenuRef.current && !toolsMenuRef.current.contains(event.target)) {
+        setShowToolsMenu(false);
+      }
     }
-    if (showCustomSlider) {
+    if (showCustomSlider || showToolsMenu) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showCustomSlider]);
+  }, [showCustomSlider, showToolsMenu]);
 
   const handleModeChange = (mode) => {
     playClickSound();
@@ -274,40 +281,6 @@ export default function Header({
 
         {/* Right Section: Tactile Utility Buttons */}
         <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Speedcubing Timer Toggle Button */}
-          <button
-            type="button"
-            onClick={handleTimerToggle}
-            onMouseEnter={playHoverSound}
-            className={`brutal-btn px-2.5 py-1.5 rounded-lg text-xs font-bold font-mono border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] transition-all cursor-pointer flex items-center gap-1.5 ${
-              isTimerOpen
-                ? 'bg-[#24C789] text-black'
-                : 'bg-white dark:bg-[#1E1E22] text-black dark:text-zinc-100 hover:bg-[#FDFBF7]'
-            }`}
-            title={t('header.timer', 'Speedcubing Timer')}
-          >
-            <Timer className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span className="hidden md:inline font-mono">
-              {t('header.timer', 'Timer')}
-            </span>
-          </button>
-
-          {/* Theme Switcher Toggle (Sun / Moon) */}
-          <button
-            type="button"
-            onClick={handleThemeToggle}
-            onMouseEnter={playHoverSound}
-            className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] text-black dark:text-zinc-100 dark:bg-[#1E1E22] transition-all cursor-pointer"
-            title={theme === 'dark' ? t('header.themeLight', 'Mode Terang') : t('header.themeDark', 'Mode Gelap')}
-            aria-label="Toggle Theme"
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-4 h-4 stroke-[2.2] text-[#FFE600]" />
-            ) : (
-              <Moon className="w-4 h-4 stroke-[2.2] text-zinc-800" />
-            )}
-          </button>
-
           {/* Calibrate Mode Toggle (Active only for 3x3) */}
           {puzzleSize === 3 && (
             <button
@@ -344,46 +317,141 @@ export default function Header({
             <Compass className="w-4 h-4 stroke-[2.2]" />
           </button>
 
-          {/* Audio Mute Toggle */}
-          <button
-            type="button"
-            onClick={handleMuteToggle}
-            onMouseEnter={playHoverSound}
-            className={`brutal-btn p-1.5 rounded-lg border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] text-black dark:text-zinc-100 transition-all cursor-pointer ${
-              isMuted ? 'bg-[#FF5252] text-white hover:bg-[#EF4444]' : 'bg-white dark:bg-[#1E1E22] hover:bg-[#FDFBF7]'
-            }`}
-            title={isMuted ? t('header.unmute', 'Unmute Audio') : t('header.mute', 'Mute Audio')}
-            aria-label="Toggle Sound"
-          >
-            {isMuted ? (
-              <VolumeX className="w-4 h-4 stroke-[2.2]" />
-            ) : (
-              <Volume2 className="w-4 h-4 stroke-[2.2] text-[#24C789]" />
+          {/* Settings / Tools Dropdown */}
+          <div className="relative" ref={toolsMenuRef}>
+            <button
+              type="button"
+              onClick={() => {
+                playClickSound();
+                setShowToolsMenu((prev) => !prev);
+              }}
+              onMouseEnter={playHoverSound}
+              aria-expanded={showToolsMenu}
+              aria-haspopup="true"
+              aria-label={t('header.tools', 'Settings & Tools')}
+              title={t('header.tools', 'Settings & Tools')}
+              className={`brutal-btn px-2.5 py-1.5 rounded-lg text-xs font-bold font-mono border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] transition-all cursor-pointer flex items-center gap-1.5 ${
+                showToolsMenu || isTimerOpen
+                  ? 'bg-[#FFE600] text-black'
+                  : 'bg-white dark:bg-[#1E1E22] text-black dark:text-zinc-100 hover:bg-[#FDFBF7]'
+              }`}
+            >
+              <Settings className="w-3.5 h-3.5 stroke-[2.3]" />
+              <span className="hidden sm:inline">{t('header.tools', 'Tools')}</span>
+              <ChevronDown className={`w-3 h-3 stroke-[2.5] transition-transform ${showToolsMenu ? 'rotate-180' : ''}`} />
+            </button>
+
+            {showToolsMenu && (
+              <div
+                role="menu"
+                aria-label={t('header.tools', 'Settings & Tools')}
+                className="absolute top-full right-0 mt-2 w-56 p-2 bg-white dark:bg-[#1E1E22] border-2 border-black dark:border-zinc-700 shadow-[4px_4px_0px_#000] dark:shadow-[4px_4px_0px_#FFE600] rounded-xl z-50 flex flex-col gap-1"
+              >
+                {/* Speedcubing Timer */}
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    handleTimerToggle();
+                    setShowToolsMenu(false);
+                  }}
+                  onMouseEnter={playHoverSound}
+                  className={`w-full px-2.5 py-2 rounded-lg text-xs font-mono font-bold flex items-center justify-between transition-colors cursor-pointer ${
+                    isTimerOpen
+                      ? 'bg-[#24C789] text-black border border-black'
+                      : 'text-black dark:text-zinc-100 hover:bg-[#F5EFEB] dark:hover:bg-zinc-800'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Timer className="w-3.5 h-3.5 stroke-[2.3]" />
+                    {t('header.timer', 'Timer')}
+                  </span>
+                  <span className="text-[10px] uppercase px-1.5 py-0.5 rounded border border-black/30 dark:border-zinc-600 bg-white/70 dark:bg-zinc-900">
+                    {isTimerOpen ? 'ON' : 'OFF'}
+                  </span>
+                </button>
+
+                {/* Theme Switcher */}
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={handleThemeToggle}
+                  onMouseEnter={playHoverSound}
+                  className="w-full px-2.5 py-2 rounded-lg text-xs font-mono font-bold flex items-center justify-between text-black dark:text-zinc-100 hover:bg-[#F5EFEB] dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    {theme === 'dark' ? (
+                      <Sun className="w-3.5 h-3.5 stroke-[2.2] text-[#FFE600]" />
+                    ) : (
+                      <Moon className="w-3.5 h-3.5 stroke-[2.2]" />
+                    )}
+                    {theme === 'dark' ? t('header.themeLight', 'Mode Terang') : t('header.themeDark', 'Mode Gelap')}
+                  </span>
+                  <span className="text-[10px] uppercase px-1.5 py-0.5 rounded border border-black/30 dark:border-zinc-600 bg-[#ECE5DF] dark:bg-zinc-900">
+                    {theme}
+                  </span>
+                </button>
+
+                {/* Audio Mute Toggle */}
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={handleMuteToggle}
+                  onMouseEnter={playHoverSound}
+                  className="w-full px-2.5 py-2 rounded-lg text-xs font-mono font-bold flex items-center justify-between text-black dark:text-zinc-100 hover:bg-[#F5EFEB] dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    {isMuted ? (
+                      <VolumeX className="w-3.5 h-3.5 stroke-[2.2] text-[#FF5252]" />
+                    ) : (
+                      <Volume2 className="w-3.5 h-3.5 stroke-[2.2] text-[#24C789]" />
+                    )}
+                    {isMuted ? t('header.unmute', 'Unmute Audio') : t('header.mute', 'Mute Audio')}
+                  </span>
+                  <span className="text-[10px] uppercase px-1.5 py-0.5 rounded border border-black/30 dark:border-zinc-600 bg-[#ECE5DF] dark:bg-zinc-900">
+                    {isMuted ? 'MUTED' : 'ON'}
+                  </span>
+                </button>
+
+                {/* Language Toggle */}
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={handleLangToggle}
+                  onMouseEnter={playHoverSound}
+                  className="w-full px-2.5 py-2 rounded-lg text-xs font-mono font-bold flex items-center justify-between text-black dark:text-zinc-100 hover:bg-[#F5EFEB] dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Languages className="w-3.5 h-3.5 stroke-[2.2]" />
+                    {t('header.toggleLang', 'Language')}
+                  </span>
+                  <span className="text-[10px] uppercase px-1.5 py-0.5 rounded border border-black/30 dark:border-zinc-600 bg-[#FFE600] text-black font-black">
+                    {lang}
+                  </span>
+                </button>
+
+                {/* Shortcuts Guide */}
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    handleShortcutsOpen();
+                    setShowToolsMenu(false);
+                  }}
+                  onMouseEnter={playHoverSound}
+                  className="w-full px-2.5 py-2 rounded-lg text-xs font-mono font-bold flex items-center justify-between text-black dark:text-zinc-100 hover:bg-[#F5EFEB] dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-3.5 h-3.5 inline-flex items-center justify-center font-black">?</span>
+                    {t('header.shortcuts', 'Keyboard Shortcuts')}
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded border border-black/30 dark:border-zinc-600 bg-[#ECE5DF] dark:bg-zinc-900">
+                    ? / K
+                  </span>
+                </button>
+              </div>
             )}
-          </button>
-
-          {/* Language Toggle */}
-          <button
-            type="button"
-            onClick={handleLangToggle}
-            onMouseEnter={playHoverSound}
-            className="brutal-btn brutal-btn-white flex items-center gap-1 px-2 py-1.5 border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] rounded-lg text-xs font-mono font-bold text-black dark:text-zinc-100 dark:bg-[#1E1E22] transition-all cursor-pointer"
-            title={t('header.toggleLang', 'Toggle Language (ID / EN)')}
-          >
-            <Languages className="w-3.5 h-3.5 stroke-[2.2]" />
-            <span className="uppercase text-[11px] font-bold">{lang}</span>
-          </button>
-
-          {/* Shortcuts Guide Button */}
-          <button
-            type="button"
-            onClick={handleShortcutsOpen}
-            onMouseEnter={playHoverSound}
-            className="brutal-btn brutal-btn-white px-2 py-1 border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] rounded-lg text-xs font-mono font-black text-black dark:text-zinc-100 dark:bg-[#1E1E22] transition-all cursor-pointer"
-            title={t('header.shortcuts', 'Keyboard Shortcuts (? or K)')}
-          >
-            ?
-          </button>
+          </div>
         </div>
       </div>
     </header>
