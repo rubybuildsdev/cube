@@ -171,6 +171,21 @@ export const MOVE_SPECS = {
   L2:  { face: 'L', axis: 'x', sliceCoord: 'x', sliceVal: -1, angle: Math.PI },
 };
 
+// Generate the 54 sticker metadata array
+export const ALL_STICKERS = [];
+for (const x of [-1, 0, 1]) {
+  for (const y of [-1, 0, 1]) {
+    for (const z of [-1, 0, 1]) {
+      if (y === 1) ALL_STICKERS.push({ pos: { x, y, z }, normal: { x: 0, y: 1, z: 0 }, ...getFaceAndIndex(x, y, z, 0, 1, 0) });
+      if (y === -1) ALL_STICKERS.push({ pos: { x, y, z }, normal: { x: 0, y: -1, z: 0 }, ...getFaceAndIndex(x, y, z, 0, -1, 0) });
+      if (z === 1) ALL_STICKERS.push({ pos: { x, y, z }, normal: { x: 0, y: 0, z: 1 }, ...getFaceAndIndex(x, y, z, 0, 0, 1) });
+      if (z === -1) ALL_STICKERS.push({ pos: { x, y, z }, normal: { x: 0, y: 0, z: -1 }, ...getFaceAndIndex(x, y, z, 0, 0, -1) });
+      if (x === -1) ALL_STICKERS.push({ pos: { x, y, z }, normal: { x: -1, y: 0, z: 0 }, ...getFaceAndIndex(x, y, z, -1, 0, 0) });
+      if (x === 1) ALL_STICKERS.push({ pos: { x, y, z }, normal: { x: 1, y: 0, z: 0 }, ...getFaceAndIndex(x, y, z, 1, 0, 0) });
+    }
+  }
+}
+
 /**
  * Applies a move notation string (e.g. "R", "U'", "F2") to a cubeState object
  */
