@@ -66,7 +66,7 @@ export default function LandingFAQ({ t }) {
   };
 
   return (
-    <section id="faq" className="relative w-full bg-[#FDFBF7] border-b-[2.5px] border-black py-16 sm:py-24 select-none">
+    <section id="faq" className="relative w-full bg-[#FDFBF7] dark:bg-[#18181B] border-b-[2.5px] border-black dark:border-zinc-700 py-16 sm:py-24 select-none">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -78,11 +78,11 @@ export default function LandingFAQ({ t }) {
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black font-sans mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black dark:text-zinc-100 font-sans mb-4">
             {tr('faq.title', 'Hal yang Sering Ditanyakan')}
           </h2>
 
-          <p className="text-base sm:text-lg text-zinc-700 font-medium leading-relaxed">
+          <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed">
             {tr(
               'faq.subtitle',
               'Jawaban ringkas seputar cara kerja algoritma, diagnostik kalibrasi stiker, dan kompatibilitas perangkat.'

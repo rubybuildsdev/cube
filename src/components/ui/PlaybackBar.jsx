@@ -102,9 +102,9 @@ export default function PlaybackBar({
 
   return (
     <div className="w-full max-w-5xl mx-auto px-2 pointer-events-auto">
-      <div className="brutal-card-paper border-[2.5px] border-black shadow-[5px_5px_0px_#000] rounded-2xl px-3.5 sm:px-5 py-2.5 flex flex-col gap-2.5 text-xs select-none bg-[#F5EFEB]">
+      <div className="brutal-card-paper border-[2.5px] border-black dark:border-zinc-700 shadow-[5px_5px_0px_#000] dark:shadow-[5px_5px_0px_#FFE600] rounded-2xl px-3.5 sm:px-5 py-2.5 flex flex-col gap-2.5 text-xs select-none bg-[#F5EFEB] dark:bg-[#1E1E22]">
         {/* Top Layer: Actions & Status */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b-2 border-black/15">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b-2 border-black/15 dark:border-zinc-700/60">
           <div className="flex flex-wrap items-center gap-2">
             {/* Big Scramble Button */}
             <button

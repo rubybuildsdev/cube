@@ -51,7 +51,7 @@ export default function StepExplanation({
     : '';
 
   return (
-    <div className="w-full brutal-card-paper bg-[#F5EFEB] border-[2.5px] border-black shadow-[4px_4px_0px_#000] rounded-2xl p-3 sm:p-4 text-black transition-all select-none">
+    <div className="w-full brutal-card-paper bg-[#F5EFEB] dark:bg-[#1E1E22] border-[2.5px] border-black dark:border-zinc-700 shadow-[4px_4px_0px_#000] dark:shadow-[4px_4px_0px_#FFE600] rounded-2xl p-3 sm:p-4 text-black dark:text-zinc-100 transition-all select-none">
       {/* Header with phase badge and current move odometer */}
       <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export default function StepExplanation({
           </div>
 
           {totalSteps > 0 && (
-            <span className="text-[11px] font-mono text-zinc-700 font-bold bg-[#ECE5DF] border border-black/40 px-1.5 py-0.5 rounded-md">
+            <span className="text-[11px] font-mono text-zinc-700 dark:text-zinc-300 font-bold bg-[#ECE5DF] dark:bg-[#18181B] border border-black/40 dark:border-zinc-700 px-1.5 py-0.5 rounded-md">
               {Math.max(0, currentStepIndex + 1)} / {totalSteps}
             </span>
           )}
@@ -72,11 +72,11 @@ export default function StepExplanation({
 
         {/* Current Move Odometer Display */}
         {move && (
-          <div className="brutal-card bg-white border-2 border-black shadow-[2px_2px_0px_#000] rounded-xl px-2.5 py-0.5 flex items-center gap-1.5">
-            <span className="text-[10px] text-zinc-600 font-mono font-black uppercase">TURN:</span>
+          <div className="brutal-card bg-white dark:bg-[#18181B] border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] rounded-xl px-2.5 py-0.5 flex items-center gap-1.5">
+            <span className="text-[10px] text-zinc-600 dark:text-zinc-400 font-mono font-black uppercase">TURN:</span>
             <span
               key={currentStepIndex}
-              className="font-mono text-sm sm:text-base font-black text-[#2563EB] inline-block animate-ticker-slide"
+              className="font-mono text-sm sm:text-base font-black text-[#2563EB] dark:text-[#60A5FA] inline-block animate-ticker-slide"
             >
               {move}
             </span>
@@ -98,17 +98,17 @@ export default function StepExplanation({
                 title={`Phase ${p.id}: ${p.name}`}
               >
                 <div
-                  className={`w-full h-2 rounded-full border border-black transition-all duration-200 ${
+                  className={`w-full h-2 rounded-full border border-black dark:border-zinc-700 transition-all duration-200 ${
                     isCurrent
                       ? 'bg-[#FFE600] shadow-[1px_1px_0px_#000] border-2 border-black scale-y-110'
                       : isCompleted
                       ? 'bg-[#24C789] border-black'
-                      : 'bg-[#ECE5DF] border-black/40'
+                      : 'bg-[#ECE5DF] dark:bg-zinc-800 border-black/40 dark:border-zinc-700'
                   }`}
                 />
                 <span
                   className={`text-[9px] font-mono mt-1 truncate max-w-full hidden md:block ${
-                    isCurrent ? 'text-black font-black underline' : isCompleted ? 'text-[#15803D] font-bold' : 'text-zinc-500 font-medium'
+                    isCurrent ? 'text-black dark:text-[#FFE600] font-black underline' : isCompleted ? 'text-[#15803D] dark:text-[#24C789] font-bold' : 'text-zinc-500 dark:text-zinc-400 font-medium'
                   }`}
                 >
                   {p.id}
@@ -121,20 +121,20 @@ export default function StepExplanation({
 
       {/* Explanation description */}
       {phaseDesc && (
-        <p className="text-xs text-zinc-800 font-medium leading-relaxed mt-1 font-sans">
+        <p className="text-xs text-zinc-800 dark:text-zinc-200 font-medium leading-relaxed mt-1 font-sans">
           {phaseDesc}
         </p>
       )}
 
       {/* Pedagogical Tips Post-it Callout */}
       {phaseTip && (
-        <div className="mt-2.5 flex items-start gap-2 p-2.5 rounded-xl bg-[#FFFBEB] border-2 border-black shadow-[2px_2px_0px_#000] text-zinc-900 text-[11px] leading-relaxed font-sans">
-          <Lightbulb className="w-4 h-4 text-black stroke-[2.5] shrink-0 mt-0.5" />
+        <div className="mt-2.5 flex items-start gap-2 p-2.5 rounded-xl bg-[#FFFBEB] dark:bg-[#27272A] border-2 border-black dark:border-zinc-700 shadow-[2px_2px_0px_#000] dark:shadow-[2px_2px_0px_#FFE600] text-zinc-900 dark:text-zinc-100 text-[11px] leading-relaxed font-sans">
+          <Lightbulb className="w-4 h-4 text-black dark:text-[#FFE600] stroke-[2.5] shrink-0 mt-0.5" />
           <div>
             <span className="font-mono font-black uppercase text-black mr-1.5 px-1 py-0.5 bg-[#FFE600] rounded border border-black text-[9px]">
               TIP
             </span>
-            <span className="font-medium text-zinc-800">{phaseTip}</span>
+            <span className="font-medium text-zinc-800 dark:text-zinc-200">{phaseTip}</span>
           </div>
         </div>
       )}

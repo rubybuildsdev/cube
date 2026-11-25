@@ -29,7 +29,7 @@ export default function LandingFeatures({ t }) {
   };
 
   return (
-    <section id="features" className="relative w-full bg-[#F5EFEB] border-b-[2.5px] border-black py-16 sm:py-24 select-none">
+    <section id="features" className="relative w-full bg-[#F5EFEB] dark:bg-[#1E1E22] border-b-[2.5px] border-black dark:border-zinc-700 py-16 sm:py-24 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -41,11 +41,11 @@ export default function LandingFeatures({ t }) {
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black font-sans mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-black dark:text-zinc-100 font-sans mb-4">
             {tr('features.title', 'Teknologi Canggih untuk Pembelajar & Speedcuber')}
           </h2>
 
-          <p className="text-base sm:text-lg text-zinc-700 font-medium leading-relaxed">
+          <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed">
             {tr(
               'features.subtitle',
               'Dari simulasi grafis Three.js berkecepatan tinggi hingga teori grup matematika, dirancang khusus untuk pembelajaran visual dan pemecahan instan.'

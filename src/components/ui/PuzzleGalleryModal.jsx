@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Check, Box, Sliders, Sparkles, AlertCircle, ArrowRight } from 'lucide-react';
 import { playClickSound, playHoverSound } from '../../utils/audio';
 
@@ -12,6 +12,16 @@ export default function PuzzleGalleryModal({
 }) {
   const [activeFilter, setActiveFilter] = useState('all'); // 'all' | 'wca' | 'special'
   const [customSliderSize, setCustomSliderSize] = useState(currentSize || 3);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose?.();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -186,8 +196,20 @@ export default function PuzzleGalleryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 select-none animate-fadeIn">
-      <div className="brutal-card bg-[#FDFBF7] dark:bg-[#1E1E22] border-[3px] border-black dark:border-zinc-700 shadow-[8px_8px_0px_#000] dark:shadow-[8px_8px_0px_#FFE600] rounded-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 bg-black/65 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 select-none animate-fadeIn"
+      onClick={() => {
+        playClickSound();
+        onClose?.();
+      }}
+      role="dialog"
+      aria-modal="true"
+      aria-label={t('gallery.title', 'Katalog Puzzle & Galeri WCA')}
+    >
+      <div
+        className="brutal-card bg-[#FDFBF7] dark:bg-[#1E1E22] border-[3px] border-black dark:border-zinc-700 shadow-[8px_8px_0px_#000] dark:shadow-[8px_8px_0px_#FFE600] rounded-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Modal Header */}
         <div className="px-5 py-4 border-b-[3px] border-black dark:border-zinc-700 bg-[#F5EFEB] dark:bg-[#27272A] flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
