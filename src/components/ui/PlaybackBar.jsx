@@ -102,149 +102,158 @@ export default function PlaybackBar({
 
   return (
     <div className="w-full max-w-5xl mx-auto px-2 pointer-events-auto">
-      <div className="brutal-card-paper border-[2.5px] border-black shadow-[5px_5px_0px_#000] rounded-2xl px-3.5 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs select-none bg-[#F5EFEB]">
-        {/* Left Section: Scramble, Solve or Inline Solved Badge, Validation info */}
-        <div className="flex items-center gap-2">
-          {/* Big Scramble Button */}
-          <button
-            type="button"
-            onClick={handleScrambleClick}
-            onMouseEnter={playHoverSound}
-            className="brutal-btn brutal-btn-yellow px-3 sm:px-3.5 py-1.5 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] text-black font-extrabold text-xs flex items-center gap-1.5 cursor-pointer font-mono"
-            title={t('controls.scramble', 'Scramble')}
-          >
-            <Shuffle className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span className="font-mono">{t('controls.scramble', 'Scramble')}</span>
-          </button>
-
-          {/* Big Solve Button OR Inline Solved Badge */}
-          {isSolved ? (
-            <div className="brutal-badge bg-[#24C789] text-black border-2 border-black shadow-[3px_3px_0px_#000] px-3 py-1.5 rounded-xl font-mono font-black text-xs flex items-center gap-1.5">
-              <Check className="w-4 h-4 stroke-[3] text-black" />
-              <span>
-                ✓ {t('ui.statusSolved', 'SOLVED')} • {solution.length > 0 ? solution.length : 0} {t('controls.moves', 'MOVES')} • {solverMode === 'beginner' ? t('controls.movesBeginner', 'BEGINNER') : t('controls.movesOptimal', 'OPTIMAL')}
-              </span>
-            </div>
-          ) : (
+      <div className="brutal-card-paper border-[2.5px] border-black shadow-[5px_5px_0px_#000] rounded-2xl px-3.5 sm:px-5 py-2.5 flex flex-col gap-2.5 text-xs select-none bg-[#F5EFEB]">
+        {/* Top Layer: Actions & Status */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b-2 border-black/15">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Big Scramble Button */}
             <button
               type="button"
-              onClick={handleSolveClick}
+              onClick={handleScrambleClick}
               onMouseEnter={playHoverSound}
-              disabled={isSolving || !isValidState}
-              className={`brutal-btn px-3.5 sm:px-4 py-1.5 rounded-xl border-2 border-black font-extrabold text-xs flex items-center gap-1.5 font-mono transition-all ${
-                isSolving
-                  ? 'bg-zinc-200 text-zinc-600 shadow-[2px_2px_0px_#000] cursor-wait'
-                  : !isValidState
-                  ? 'bg-zinc-200 text-zinc-400 shadow-[2px_2px_0px_#000] cursor-not-allowed opacity-60'
-                  : 'brutal-btn-green shadow-[3px_3px_0px_#000] text-black cursor-pointer'
-              }`}
+              className="brutal-btn brutal-btn-yellow px-3 sm:px-3.5 py-1.5 rounded-xl border-2 border-black shadow-[3px_3px_0px_#000] text-black font-extrabold text-xs flex items-center gap-1.5 cursor-pointer font-mono"
+              title={t('controls.scramble', 'Scramble')}
             >
-              {isSolving ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin text-black stroke-[2.5]" />
-                  <span>{t('controls.solving', 'Solving...')}</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4 stroke-[2.5] text-black" />
-                  <span>{t('controls.solve', 'Solve Cube')}</span>
-                </>
-              )}
+              <Shuffle className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span className="font-mono">{t('controls.scramble', 'Scramble')}</span>
             </button>
-          )}
 
-          {/* Validation Warning when state is invalid */}
+            {/* Big Solve Button OR Inline Solved Badge */}
+            {isSolved ? (
+              <div className="brutal-badge bg-[#24C789] text-black border-2 border-black shadow-[3px_3px_0px_#000] px-3 py-1.5 rounded-xl font-mono font-black text-xs flex items-center gap-1.5">
+                <Check className="w-4 h-4 stroke-[3] text-black" />
+                <span>
+                  ✓ {t('ui.statusSolved', 'SOLVED')} • {solution.length > 0 ? solution.length : 0} {t('controls.moves', 'MOVES')} • {solverMode === 'beginner' ? t('controls.movesBeginner', 'BEGINNER') : t('controls.movesOptimal', 'OPTIMAL')}
+                </span>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSolveClick}
+                onMouseEnter={playHoverSound}
+                disabled={isSolving || !isValidState}
+                className={`brutal-btn px-3.5 sm:px-4 py-1.5 rounded-xl border-2 border-black font-extrabold text-xs flex items-center gap-1.5 font-mono transition-all ${
+                  isSolving
+                    ? 'bg-zinc-200 text-zinc-600 shadow-[2px_2px_0px_#000] cursor-wait'
+                    : !isValidState
+                    ? 'bg-zinc-200 text-zinc-400 shadow-[2px_2px_0px_#000] cursor-not-allowed opacity-60'
+                    : 'brutal-btn-green shadow-[3px_3px_0px_#000] text-black cursor-pointer'
+                }`}
+              >
+                {isSolving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-black stroke-[2.5]" />
+                    <span>{t('controls.solving', 'Solving...')}</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 stroke-[2.5] text-black" />
+                    <span>{t('controls.solve', 'Solve Cube')}</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+
+          {/* Validation Warning Banner (non-truncated) */}
           {!isValidState && validationError && (
             <div
-              className={`border-2 border-black shadow-[2px_2px_0px_#000] px-2.5 py-1 rounded-xl text-[11px] font-mono font-bold flex items-center gap-1.5 max-w-[200px] sm:max-w-xs truncate ${
+              role="alert"
+              className={`border-2 border-black shadow-[2px_2px_0px_#000] px-3 py-1.5 rounded-xl text-[11px] font-mono font-bold flex items-start gap-2 w-full sm:w-auto sm:flex-1 sm:max-w-xl ${
                 isUnpainted
                   ? 'bg-[#FFE600] text-black'
                   : 'bg-[#FF5252] text-white'
               }`}
-              title={validationError}
             >
-              <AlertCircle className="w-3.5 h-3.5 shrink-0 stroke-[2.5]" />
-              <span className="truncate">{validationError}</span>
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.5]" />
+              <span className="whitespace-normal break-words leading-snug">{validationError}</span>
             </div>
           )}
         </div>
 
-        {/* Center Section: Tactile Mechanical Playback Keys + Timeline Scrubber */}
-        <div className="flex items-center gap-2">
-          {/* Mechanical Keys: [|<] [<<] [▶/❚❚] [>>] [>|] */}
-          <div className="flex items-center gap-1">
-            {/* [|<] Reset / Restart */}
-            <button
-              type="button"
-              onClick={handleReset}
-              onMouseEnter={playHoverSound}
-              disabled={!hasSolution}
-              className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-              title={t('controls.reset', 'Restart playback')}
-            >
-              <RotateCcw className="w-3.5 h-3.5 stroke-[2.3]" />
-            </button>
+        {/* Bottom Layer: Transport, Timeline & Speed */}
+        <div className="flex flex-wrap items-center justify-between gap-2.5">
+          {/* Tactile Mechanical Playback Keys + Timeline Scrubber */}
+          <div className="flex items-center gap-2">
+            {/* Mechanical Keys: [|<] [<<] [▶/❚❚] [>>] [>|] */}
+            <div className="flex items-center gap-1">
+              {/* [|<] Reset / Restart */}
+              <button
+                type="button"
+                onClick={handleReset}
+                onMouseEnter={playHoverSound}
+                disabled={!hasSolution}
+                className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                title={t('controls.reset', 'Restart playback')}
+                aria-label={t('controls.reset', 'Restart playback')}
+              >
+                <RotateCcw className="w-3.5 h-3.5 stroke-[2.3]" />
+              </button>
 
-            {/* [<<] Step Backward */}
-            <button
-              type="button"
-              onClick={handleStepBackward}
-              onMouseEnter={playHoverSound}
-              disabled={!hasSolution || currentStepIndex <= -1}
-              className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-              title={t('controls.stepPrev', 'Previous move')}
-            >
-              <SkipBack className="w-3.5 h-3.5 stroke-[2.3]" />
-            </button>
+              {/* [<<] Step Backward */}
+              <button
+                type="button"
+                onClick={handleStepBackward}
+                onMouseEnter={playHoverSound}
+                disabled={!hasSolution || currentStepIndex <= -1}
+                className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                title={t('controls.stepPrev', 'Previous move')}
+                aria-label={t('controls.stepPrev', 'Previous move')}
+              >
+                <SkipBack className="w-3.5 h-3.5 stroke-[2.3]" />
+              </button>
 
-            {/* [▶/❚❚] Play / Pause */}
-            <button
-              type="button"
-              onClick={handlePlayPause}
-              onMouseEnter={playHoverSound}
-              disabled={!hasSolution || isFinished}
-              className={`brutal-btn px-3 py-1.5 rounded-xl border-2 border-black shadow-[2.5px_2.5px_0px_#000] font-mono font-black text-xs flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed transition-all ${
-                isPlaying ? 'bg-[#FFE600] text-black' : 'bg-[#24C789] text-black'
-              }`}
-              title={isPlaying ? t('controls.pause', 'Pause') : t('controls.play', 'Play')}
-            >
-              {isPlaying ? (
-                <>
-                  <Pause className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
-                  <span className="hidden sm:inline">{t('controls.pause', 'Pause')}</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
-                  <span className="hidden sm:inline">{t('controls.play', 'Play')}</span>
-                </>
-              )}
-            </button>
+              {/* [▶/❚❚] Play / Pause */}
+              <button
+                type="button"
+                onClick={handlePlayPause}
+                onMouseEnter={playHoverSound}
+                disabled={!hasSolution || isFinished}
+                className={`brutal-btn px-3 py-1.5 rounded-xl border-2 border-black shadow-[2.5px_2.5px_0px_#000] font-mono font-black text-xs flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed transition-all ${
+                  isPlaying ? 'bg-[#FFE600] text-black' : 'bg-[#24C789] text-black'
+                }`}
+                title={isPlaying ? t('controls.pause', 'Pause') : t('controls.play', 'Play')}
+                aria-label={isPlaying ? t('controls.pause', 'Pause') : t('controls.play', 'Play')}
+              >
+                {isPlaying ? (
+                  <>
+                    <Pause className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
+                    <span className="hidden sm:inline">{t('controls.pause', 'Pause')}</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-3.5 h-3.5 fill-black stroke-[2.5]" />
+                    <span className="hidden sm:inline">{t('controls.play', 'Play')}</span>
+                  </>
+                )}
+              </button>
 
-            {/* [>>] Step Forward */}
-            <button
-              type="button"
-              onClick={handleStepForward}
-              onMouseEnter={playHoverSound}
-              disabled={!hasSolution || isFinished}
-              className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-              title={t('controls.stepNext', 'Next move')}
-            >
-              <SkipForward className="w-3.5 h-3.5 stroke-[2.3]" />
-            </button>
+              {/* [>>] Step Forward */}
+              <button
+                type="button"
+                onClick={handleStepForward}
+                onMouseEnter={playHoverSound}
+                disabled={!hasSolution || isFinished}
+                className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                title={t('controls.stepNext', 'Next move')}
+                aria-label={t('controls.stepNext', 'Next move')}
+              >
+                <SkipForward className="w-3.5 h-3.5 stroke-[2.3]" />
+              </button>
 
-            {/* [>|] Jump to End */}
-            <button
-              type="button"
-              onClick={handleJumpToEnd}
-              onMouseEnter={playHoverSound}
-              disabled={!hasSolution || isFinished}
-              className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-              title={t('controls.lastStep', 'Jump to end')}
-            >
-              <FastForward className="w-3.5 h-3.5 stroke-[2.3]" />
-            </button>
-          </div>
+              {/* [>|] Jump to End */}
+              <button
+                type="button"
+                onClick={handleJumpToEnd}
+                onMouseEnter={playHoverSound}
+                disabled={!hasSolution || isFinished}
+                className="brutal-btn brutal-btn-white p-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] text-black font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                title={t('controls.lastStep', 'Jump to end')}
+                aria-label={t('controls.lastStep', 'Jump to end')}
+              >
+                <FastForward className="w-3.5 h-3.5 stroke-[2.3]" />
+              </button>
+            </div>
 
           {/* Move Notation HUD & Timeline Scrubber */}
           {hasSolution ? (
@@ -317,7 +326,7 @@ export default function PlaybackBar({
           )}
         </div>
 
-        {/* Right Section: Speed Selector */}
+        {/* Speed Selector */}
         <div className="brutal-bay bg-[#ECE5DF] border-2 border-black p-0.5 rounded-xl flex items-center gap-0.5 shadow-[inset_1.5px_1.5px_0px_rgba(0,0,0,0.2)]">
           {SPEEDS.map((s) => {
             const isSelected = speed === s;
@@ -338,6 +347,7 @@ export default function PlaybackBar({
               </button>
             );
           })}
+        </div>
         </div>
       </div>
     </div>
